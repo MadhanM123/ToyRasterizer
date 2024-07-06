@@ -56,6 +56,42 @@ struct TGAColor{
     }
 };
 
+class TGAImg{
+    
+    protected:
+        unsigned char* data;
+        int width;
+        int height;
+        int bytespp;
+
+        bool load_rle_data(std::ifstream &in);
+        bool unload_rle_data(std::ofstream &out);
+
+    public:
+        enum Format{
+            GRAYSCALE = 1, RGB = 3, RGBA = 4
+        };
+
+        TGAImg();
+        TGAImg(int w, int h, int bpp);
+        TGAImg(const TGAImg &img);
+
+        bool read_tga_file(const char *filename);
+        bool write_tga_file(const char *filename, bool rle = true);
+        bool flip_horiz();
+        bool flip_vert();
+        bool scale(int w, int h);
+        TGAColor get(int x, int y);
+        bool set(int x, int y, TGAColor c);
+        ~TGAImg();
+        TGAImg& operator = (const TGAImg &img);
+        int get_width();
+        int get_height();
+        int get_bytespp();
+        unsigned char* buffer;
+        void clear();
+};
 
 
-#endif
+
+#endif //IMG_H
