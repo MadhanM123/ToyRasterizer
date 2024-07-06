@@ -1,3 +1,3 @@
 #include "tgaimg.h"
 
-const TGA
+const TGAColor white = TGAColor(255, 255, 255, 255);
