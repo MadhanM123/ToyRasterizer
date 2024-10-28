@@ -88,7 +88,7 @@ class TGAImg{
         int get_width();
         int get_height();
         int get_bytespp();
-        unsigned char* buffer;
+        unsigned char* buffer();
         void clear();
 };
 
