@@ -95,10 +95,10 @@ bool TGAImg::read_tga_file(const char* filename){
         return false;
     }
 
-    if(!head.imgdescript & 0x20){
+    if(!(head.imgdescript & 0x20)){
         flip_vert();
     }
-    if(head.imgdescript && 0x10){
+    if(head.imgdescript & 0x10){
         flip_horiz();
     }
 
@@ -169,7 +169,7 @@ bool TGAImg::load_rle_data(std::ifstream &input){
     return true;
 }
 
-bool TGAImg::write_tga_file(const char* filename, bool rle = true){
+bool TGAImg::write_tga_file(const char* filename, bool rle){
     unsigned char dev_area_ref[4] = {0, 0, 0, 0};
     unsigned char exten_area_ref[4] = {0, 0, 0, 0};
     unsigned char foot[18] = {'T', 'R', 'U', 'E', 'V', 'I', 'S', 'I', 'O', 'N', '-', 'X', 'F', 'I', 'L', 'E', '.', '\0'};
@@ -188,7 +188,7 @@ bool TGAImg::write_tga_file(const char* filename, bool rle = true){
     head.bitsperpix = bytespp << 3;
     head.width = width;
     head.height = height;
-    head.datatypecode = (bytespp == GRAYSCALE) ? (rle ? 11 : 3) : (rle ? 10 : 2);
+    head.datatypecode = (bytespp == GRAYSCALE ? (rle ? 11 : 3) : (rle ? 10 : 2));
     head.imgdescript = 0x20; //orig at left top
 
     output.write((char *)&head, sizeof(head));
@@ -244,7 +244,7 @@ bool TGAImg::write_tga_file(const char* filename, bool rle = true){
 bool TGAImg::unload_rle_data(std::ofstream& output){
     const unsigned char max_chunk_len = 128;
     unsigned long npix = width * height;
-    unsigned long curpix;
+    unsigned long curpix = 0;
 
     while(curpix < npix){
         unsigned long chunkstart = curpix * bytespp;
